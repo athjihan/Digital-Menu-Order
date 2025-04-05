@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Penjual</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body style="font-family: Poppins;">
+    <div class="container mb-5">
+        <h2 class="text-center mt-3">👨‍🍳 Staff Dashboard</h2>
+
+        <!-- Navbar -->
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" onclick="showTab('orderTab')">📋 Order</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('menuTab')">🍽️ Menu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('reportTab')">📊 Report</a>
+            </li>
+        </ul>
+
+        <!-- Order Tab -->
+        <div id="orderTab" class="tab-content mt-3">
+            <h3>📋 Order Queue</h3>
+            <% if (queue.length> 0) { %>
+                <table class="table table-bordered table-striped rounded-3">
+                    <thead>
+                        <tr>
+                            <th>Order Number</th>
+                            <th>Table Number</th>
+                            <th>Menu</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% queue.forEach(order=> { %>
+                            <tr>
+                                <td>
+                                    <%= order.orderNumber %>
+                                </td>
+                                <td>
+                                    <%= order.tableNumber %>
+                                </td>
+                                <td>
+                                    <%= order.productName %>
+                                </td>
+                                <td>
+                                    <%= order.quantityOrdered %>
+                                </td>
+                                <td>
+                                    <%= order.queue_status %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% } else { %>
+                    <p>ℹ️ No order queue waiting.</p>
+                    <% } %>
+
+                        <h3>✅ Confirm Order Completion</h3>
+                        <form action="/confirm-order" method="POST">
+                            <label for="orderNumber">Order Number:</label>
+                            <input type="number" name="orderNumber" required class="form-control" min="1" required
+                                style="width: auto; display: inline-block;">
+                            <button type="submit" class="btn btn-secondary"
+                                style="font-size: medium; background-color: #478491; color: white;">Confirm</button>
+                        </form>
+        </div>
+
+        <!-- Menu Tab -->
+        <div id="menuTab" class="tab-content mt-3" style="display: none;">
+            <h3>🔄 Update Menu Availability</h3>
+            <form action="/update-availability" method="POST">
+                <label>Choose Menu:</label>
+                <input type="text" id="menuSearch" class="form-control" placeholder="Search menu..."
+                    onkeyup="filterMenu()" onclick="showDropdown()" autocomplete="off">
+
+                <!-- Hidden input untuk menyimpan product_code yang dipilih -->
+                <input type="hidden" name="product_code" id="selectedProductCode">
+
+                <div id="menuDropdown" class="dropdown-menu w-100"
+                    style="max-height: 200px; overflow-y: auto; display: none;">
+                    <% menuItems.forEach(item=> { %>
+                        <a href="#" class="dropdown-item"
+                            onclick="selectMenu('<%= item.productCode %>', '<%= item.productName %>')">
+                            <%= item.productName %>
+                        </a>
+                        <% }) %>
+                </div>
+
+                <div class="mt-2">
+                    <label>Availability:</label>
+                    <select name="availability" class="form-select" style="width: auto; display: inline-block;">
+                        <option value="available">Available</option>
+                        <option value="not available">Not Available</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-secondary"
+                        style="font-size: medium; background-color: #478491; color: white;">Update</button>
+            </form>
+
+            <div class="mt-3">
+                <h3>➕ Add Menu</h3>
+                <div id="add-menu-toast" class="toast position-fixed top-0 start-50 translate-middle-x custom-toast"
+                    role="alert" aria-live="assertive" aria-atomic="true"
+                    style="min-width: 250px; z-index: 1050; display: none;">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            ✅ New menu added!
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+
+                <form action="/add-menu" method="POST">
+                    <label>Product Code:</label>
+                    <input type="text" name="product_code" class="form-control" required>
+
+                    <label>Menu Name:</label>
+                    <input type="text" name="name" class="form-control" required>
+
+                    <label>Price:</label>
+                    <input type="number" name="price" class="form-control" required>
+
+                    <label>Image URL:</label>
+                    <input type="text" name="image_url" class="form-control" value="/assets/" required>
+
+                    <div class="mt-2 mb-5">
+                        <label>Category:</label>
+                        <select name="category" class="form-select" style="width: auto; display: inline-block;">
+                            <option value="food">Food</option>
+                            <option value="drink">Drink</option>
+                            <option value="snack">Snack</option>
+                        </select>
+
+                        <label>Availability:</label>
+                        <select name="availability" class="form-select" style="width: auto; display: inline-block;">
+                            <option value="available">Available</option>
+                            <option value="not available">Not Available</option>
+                        </select>
+                        <button type="submit" class="btn btn-secondary"
+                            style="font-size: medium; background-color: #478491; color: white;">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Tab -->
+    <div id="reportTab" class="tab-content mt-3" style="display: none;">
+
+        <h3>💰 Total Income</h3>
+        <form id="incomeForm">
+            <label>From:</label>
+            <input type="date" id="start_date" name="start_date" required>
+
+            <label>To:</label>
+            <input type="date" id="end_date" name="end_date" required>
+
+            <button type="submit" class="btn btn-secondary"
+                style="font-size: medium; background-color: #478491; color: white;">Check Income</button>
+        </form>
+        <div id="incomeResult" class="mt-3"></div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            // Sembunyikan semua tab
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+
+            // Tampilkan tab yang dipilih
+            document.getElementById(tabId).style.display = 'block';
+
+            // Update kelas 'active' pada navbar
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function showDropdown() {
+            document.getElementById('menuDropdown').style.display = 'block';
+        }
+
+        function filterMenu() {
+            let input = document.getElementById('menuSearch').value.toLowerCase();
+            let dropdown = document.getElementById('menuDropdown');
+            let items = dropdown.getElementsByClassName('dropdown-item');
+
+            for (let i = 0; i < items.length; i++) {
+                let text = items[i].textContent.toLowerCase();
+                items[i].style.display = text.includes(input) ? '' : 'none';
+            }
+        }
+
+        function selectMenu(code, name) {
+            document.getElementById('menuSearch').value = name; // Isi input dengan nama menu
+            document.getElementById('selectedProductCode').value = code; // Simpan kode produk
+            document.getElementById('menuDropdown').style.display = 'none'; // Sembunyikan dropdown
+        }
+
+        // Sembunyikan dropdown jika klik di luar
+        document.addEventListener('click', function (event) {
+            let dropdown = document.getElementById('menuDropdown');
+            let input = document.getElementById('menuSearch');
+            if (!dropdown.contains(event.target) && event.target !== input) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('success') === 'true') {
+            const toast = new bootstrap.Toast(document.getElementById('add-menu-toast'));
+            toast.show();
+        }
+
+        document.getElementById("incomeForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // supaya tidak reload
+
+            const start_date = document.getElementById("start_date").value;
+            const end_date = document.getElementById("end_date").value;
+
+            fetch("/check-income", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ start_date, end_date })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Income response:", data); // debug
+                    if (data.totalIncome !== undefined) {
+                        document.getElementById("incomeResult").textContent = `Total Income: Rp${data.totalIncome}`;
+                    } else {
+                        document.getElementById("incomeResult").textContent = "Income: Error";
+                    }
+                })
+                .catch(error => {
+                    console.error("Fetch income error:", error);
+                    document.getElementById("incomeResult").textContent = "Income: Fetch error";
+                });
+        });
+    </script>
+
+</body>
+
+</html>

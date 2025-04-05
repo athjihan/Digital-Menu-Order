@@ -1,0 +1,29 @@
+<h1>📑 Detail Order</h1>
+<table border="1">
+    <tr>
+        <th>Order Number</th>
+        <th>Product Code</th>
+        <th>Quantity</th>
+        <th>priceEach</th>
+        <th>queue Status</th>
+    </tr>
+    <% orderDetails.forEach(detail=> { %>
+        <tr>
+            <td>
+                <%= detail.orderNumber %>
+            </td>
+            <td>
+                <%= detail.productCode %>
+            </td>
+            <td>
+                <%= detail.quantityOrdered %>
+            </td>
+            <td>
+                <%= detail.priceEach %>
+            </td>
+            <td>
+                <%= detail.queue_status %>
+            </td>
+        </tr>
+        <% }) %>
+</table>
