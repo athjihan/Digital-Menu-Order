@@ -4,12 +4,12 @@ const session = require('express-session');
 const path = require('path');
 const pool = require('./config/db');
 
-const MenuService   = require('./services/menuService');
-const OrderService  = require('./services/orderService');
+const MenuService = require('./services/menuService');
+const OrderService = require('./services/orderService');
 const SellerService = require('./services/sellerService');
 
-const menuRoutes   = require('./routes/menuRoutes');
-const orderRoutes  = require('./routes/orderRoutes');
+const menuRoutes = require('./routes/menuRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 const sellerRoutes = require('./routes/sellerRoutes');
 
 const app = express();

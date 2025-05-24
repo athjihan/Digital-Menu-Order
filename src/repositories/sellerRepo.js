@@ -21,16 +21,6 @@ class SellerRepository {
     return rows;
   }
 
-  async getTopProducts(limit = 5) {
-    const [results] = await this.db.query("CALL GetTopProducts(?, 'DESC')", [limit]);
-    return results[0] || [];
-  }
-
-  async getBottomProducts(limit = 5) {
-    const [results] = await this.db.query("CALL GetTopProducts(?, 'ASC')", [limit]);
-    return results[0] || [];
-  }
-
   async confirmOrder(orderNumber) {
     await this.db.query('CALL UpdateQueueStatus(?)', [orderNumber]);
   }

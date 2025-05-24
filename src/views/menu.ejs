@@ -156,9 +156,11 @@
     </div>
 
 
-    <script>
+    <script type="module">
+        import { addToCart, getCart, saveCart, removeFromCart } from '../utils/cart.js';
+
         document.addEventListener("DOMContentLoaded", function () {
-            const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+            let cart = getCart();
 
             document.querySelectorAll(".add-to-cart").forEach(button => {
                 button.addEventListener("click", function () {
@@ -168,27 +170,20 @@
                     const quantityInput = this.closest(".card-body").querySelector("input[name='quantities']");
                     const quantity = parseInt(quantityInput.value) || 1;
 
-                    const existingItem = cart.find(item => item.id === productId);
-                    if (existingItem) {
-                        existingItem.quantity += quantity;
-                    } else {
-                        cart.push({ id: productId, name: productName, price, quantity });
-                    }
+                    cart = addToCart(cart, { id: productId, name: productName, price, quantity });
+                    saveCart(cart);
 
-                    sessionStorage.setItem("cart", JSON.stringify(cart));
                     displayCartItems();
-                    // Tampilkan toast Bootstrap
+                    // Tampilkan toast
                     const toast = document.getElementById("cart-toast");
-                    toast.style.display = "block"; // Pastikan toast muncul
-                    setTimeout(() => {
-                        toast.style.display = "none";
-                    }, 2000); // Toast akan hilang setelah 2 detik
+                    toast.style.display = "block";
+                    setTimeout(() => toast.style.display = "none", 2000);
                 });
             });
 
             function displayCartItems() {
                 const cartTable = document.getElementById("cart-items");
-                const cartData = JSON.parse(sessionStorage.getItem("cart")) || [];
+                const cartData = getCart();
                 cartTable.innerHTML = "";
 
                 if (cartData.length === 0) {
@@ -196,60 +191,34 @@
                 } else {
                     cartData.forEach((item, index) => {
                         const row = `
-                            <tr>
-                                <td>${item.name}</td>
-                                <td>Rp ${item.price.toLocaleString()}</td>
-                                <td>${item.quantity}</td>
-                                <td>Rp ${(item.price * item.quantity).toLocaleString()}</td>
-                                <td>
-                                    <button class="btn btn-outline-danger btn-sm remove-item" data-index="${index}">❌ Cancel</button>
-                                </td>
-                            </tr>
-                        `;
+            <tr>
+              <td>${item.name}</td>
+              <td>Rp ${item.price.toLocaleString()}</td>
+              <td>${item.quantity}</td>
+              <td>Rp ${(item.price * item.quantity).toLocaleString()}</td>
+              <td>
+                <button class="btn btn-outline-danger btn-sm remove-item" data-index="${index}">❌ Cancel</button>
+              </td>
+            </tr>
+          `;
                         cartTable.innerHTML += row;
                     });
                 }
 
                 document.querySelectorAll(".remove-item").forEach(button => {
                     button.addEventListener("click", function () {
-                        const index = this.dataset.index;
-                        cart.splice(index, 1);
-                        sessionStorage.setItem("cart", JSON.stringify(cart));
+                        const index = parseInt(this.dataset.index);
+                        cart = removeFromCart(cart, index);
+                        saveCart(cart);
                         displayCartItems();
                     });
                 });
             }
 
             displayCartItems();
-
-            document.getElementById("clear-cart").addEventListener("click", function () {
-                if (confirm("Are you sure you want to clear the cart?")) {
-                    sessionStorage.removeItem("cart");
-                    displayCartItems();
-                    location.reload();
-                }
-            });
         });
-
-        document.getElementById("order-form").addEventListener("submit", function (e) {
-            const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-
-            if (cart.length === 0) {
-                alert("Cart is empty! Please add items before ordering.");
-                e.preventDefault(); // Prevent form submission
-                return;
-            }
-
-            const selectedItems = cart.map(item => item.id).join(",");
-            const quantities = cart.map(item => item.quantity).join(",");
-
-            document.getElementById("selected_items").value = selectedItems;
-            document.getElementById("quantities").value = quantities;
-
-            sessionStorage.removeItem("cart");
-        });
-
     </script>
+
 </body>
 
 </html>
