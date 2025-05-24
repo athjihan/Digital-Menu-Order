@@ -1,26 +1,50 @@
 // src/services/OrderService.js
 class OrderService {
-  constructor(orderRepo) { this.orderRepo = orderRepo; }
+  constructor(orderRepo) {
+    this.orderRepo = orderRepo;
+    // orderRepo.pool adalah pool mysql
+  }
 
-  async placeOrder(data) {
-    const { customerPhone, tableNumber, paymentMethod, selectedItems, quantities } = data;
+  async placeOrder({ customerPhone, tableNumber, paymentMethod, selectedItems, quantities }) {
     if (!customerPhone || !selectedItems.length) {
       throw new Error('Required fields missing');
     }
 
-    await this.orderRepo.db.beginTransaction();
+    // 1. ambil connection dari pool
+    const conn = await this.orderRepo.pool.getConnection();
+
     try {
-      const totalPrice = await this.orderRepo.calculateTotal(selectedItems, quantities);
-      const orderNumber = await this.orderRepo.createOrder(
-        customerPhone, tableNumber, totalPrice, paymentMethod
-      );
-      await this.orderRepo.addOrderDetails(orderNumber, selectedItems, quantities);
-      await this.orderRepo.updateTotalAmount(orderNumber, totalPrice);
-      await this.orderRepo.db.commit();
+      // 2. mulai transaksi
+      await conn.beginTransaction();
+
+      // 3. hitung total
+      const totalPrice = await this.orderRepo.calculateTotal(conn, selectedItems, quantities);
+
+      // 4. buat order
+      const orderNumber = await this.orderRepo.createOrder(conn, {
+        customerPhone,
+        tableNumber,
+        totalPrice,
+        paymentMethod
+      });
+
+      // 5. simpan detail
+      await this.orderRepo.addOrderDetails(conn, orderNumber, selectedItems, quantities);
+
+      // 6. update total di order
+      await this.orderRepo.updateTotalAmount(conn, orderNumber, totalPrice);
+
+      // 7. commit
+      await conn.commit();
+
       return { orderNumber, totalPrice };
     } catch (err) {
-      await this.orderRepo.db.rollback();
+      // rollback bila gagal
+      await conn.rollback();
       throw err;
+    } finally {
+      // lepas connection
+      conn.release();
     }
   }
 }

@@ -1,11 +1,14 @@
 // src/repositories/OrderRepository.js
 class OrderRepository {
-  constructor(db) { this.db = db; }
+  constructor(pool) {
+    this.pool = pool; // pool mysql2
+  }
 
-  async calculateTotal(selectedItems, quantities) {
+  // Hitung total harga—gunakan `conn`
+  async calculateTotal(conn, selectedItems, quantities) {
     let total = 0;
     for (let i = 0; i < selectedItems.length; i++) {
-      const [rows] = await this.db.query(
+      const [rows] = await conn.query(
         'SELECT price FROM menu WHERE productCode = ?',
         [selectedItems[i]]
       );
@@ -14,27 +17,33 @@ class OrderRepository {
     return total;
   }
 
-  async createOrder(customerPhone, tableNumber, totalPrice, paymentMethod) {
-    await this.db.query('CALL AddOrder(?, ?, ?, ?)', [customerPhone, tableNumber, totalPrice, paymentMethod]);
-    const [orderRow] = await this.db.query('SELECT LAST_INSERT_ID() AS orderNumber');
+  // Buat entry di tabel orders—pakai `conn`
+  async createOrder(conn, { customerPhone, tableNumber, totalPrice, paymentMethod }) {
+    await conn.query(
+      'CALL AddOrder(?, ?, ?, ?)',
+      [customerPhone, tableNumber, totalPrice, paymentMethod]
+    );
+    const [orderRow] = await conn.query('SELECT LAST_INSERT_ID() AS orderNumber');
     return orderRow[0].orderNumber;
   }
 
-  async addOrderDetails(orderNumber, selectedItems, quantities) {
+  // Masukkan detail order
+  async addOrderDetails(conn, orderNumber, selectedItems, quantities) {
     for (let i = 0; i < selectedItems.length; i++) {
-      const [rows] = await this.db.query(
+      const [rows] = await conn.query(
         'SELECT price FROM menu WHERE productCode = ?',
         [selectedItems[i]]
       );
-      await this.db.query(
+      await conn.query(
         'INSERT INTO order_details (orderNumber, productCode, priceEach, quantityOrdered) VALUES (?, ?, ?, ?)',
         [orderNumber, selectedItems[i], rows[0].price, quantities[i]]
       );
     }
   }
 
-  async updateTotalAmount(orderNumber, totalPrice) {
-    await this.db.query(
+  // Update totalAmount di orders
+  async updateTotalAmount(conn, orderNumber, totalPrice) {
+    await conn.query(
       'UPDATE orders SET totalAmount = ? WHERE orderNumber = ?',
       [totalPrice, orderNumber]
     );
