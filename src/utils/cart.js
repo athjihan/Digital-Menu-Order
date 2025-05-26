@@ -19,8 +19,13 @@ function getCart() {
     return JSON.parse(sessionStorage.getItem("cart")) || [];
 }
 
+function saveCart(cart) {
+    sessionStorage.setItem("cart", JSON.stringify(cart));
+}
+
 module.exports = {
     addToCart,
     removeFromCart,
     getCart,
+    saveCart
 };

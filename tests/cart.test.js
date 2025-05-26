@@ -1,8 +1,8 @@
-// unit tests for the cart logic
-
 const {
     addToCart,
     removeFromCart,
+    getCart,
+    saveCart
 } = require('../src/utils/cart');
 
 describe('Cart Logic Unit Tests', () => {
@@ -27,4 +27,5 @@ describe('Cart Logic Unit Tests', () => {
         expect(result).toHaveLength(1);
         expect(result[0].id).toBe("2");
     });
+
 });

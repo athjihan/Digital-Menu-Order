@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "app01.js",
   "scripts": {
+    "type": "module",
     "test": "jest",
     "start": "node bin/www.js",
     "dev": "nodemon bin/www.js"
@@ -18,5 +19,11 @@
     "open": "^10.1.0",
     "project01": "file:"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0"
+  }
 }
