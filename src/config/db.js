@@ -1,10 +1,10 @@
 const mysql = require("mysql2/promise");
 
 const pool = mysql.createPool({
-  host: "host.docker.internal", // Use 'host.docker.internal' for Docker on Windows/Mac
-  user: "root",
-  password: "",
-  database: "seafood_database",
+  host: process.env.DB_HOST || "db",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "seafood_database",
 });
 
 module.exports = pool;

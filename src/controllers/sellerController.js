@@ -1,8 +1,8 @@
 // src/controllers/sellerController.js
 exports.showDashboard = async (req, res, next) => {
   try {
-    const { queue, menuItems, topProducts, bottomProducts } = await req.container.sellerService.getDashboard();
-    res.render('seller', { queue, menuItems, topProducts, bottomProducts, totalIncome: undefined });
+    const { queue, menuItems } = await req.container.sellerService.getDashboard();
+    res.render('seller', { queue, menuItems, totalIncome: undefined });
   } catch (err) { next(err); }
 };
 

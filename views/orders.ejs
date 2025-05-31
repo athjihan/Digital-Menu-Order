@@ -1,0 +1,33 @@
+<h1>📦 Daftar Order</h1>
+<table border="1">
+    <tr>
+        <th>Nomor Order</th>
+        <th>Nomor Meja</th>
+        <th>orderDate</th>
+        <th>phoneNumber</th>
+        <th>totalAmount</th>
+        <th>Payment</th>
+    </tr>
+    <% orders.forEach(order=> { %>
+        <tr>
+            <td>
+                <%= order.orderNumber %>
+            </td>
+            <td>
+                <%= order.tableNumber %>
+            </td>
+            <td>
+                <%= order.orderDate %>
+            </td>
+            <td>
+                <%=order.phoneNumber%>
+            </td>
+            <td>
+                <%=order.totalAmount%>
+            </td>
+            <td>
+                <%=order.payment%>
+            </td>
+        </tr>
+        <% }) %>
+</table>

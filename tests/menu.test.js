@@ -1,5 +1,3 @@
-// unit test for menu repository
-
 const MenuRepository = require('../src/repositories/menuRepo');
 
 describe('MenuRepository Unit Tests', () => {
@@ -14,7 +12,7 @@ describe('MenuRepository Unit Tests', () => {
     });
 
     test('findAll should return all menu items', async () => {
-        const mockData = [[{ id: 1, name: '' }, { id: 2, name: 'Sate Ayam' }]];
+        const mockData = [[{ id: 1, name: 'Nasi Goreng' }, { id: 2, name: 'Sate Ayam' }]];
         dbMock.query.mockResolvedValueOnce(mockData);
 
         const result = await menuRepo.findAll();
@@ -23,22 +21,28 @@ describe('MenuRepository Unit Tests', () => {
     });
 
     test('searchByName should return menu items that match keyword', async () => {
-        const keyword = 'ayam';
-        const mockResult = [[[{ id: 1, name: 'Ayam Geprek' }]]];
+        const keyword = 'udang';
+        const mockResult = [[{ id: 1, name: 'Udang Goreng' }]];
         dbMock.query.mockResolvedValueOnce(mockResult);
 
         const result = await menuRepo.searchByName(keyword);
-        expect(dbMock.query).toHaveBeenCalledWith('CALL SearchMenu(?)', [keyword]);
-        expect(result).toEqual(mockResult[0][0]);
+        expect(dbMock.query).toHaveBeenCalledWith(
+            "SELECT * FROM menu WHERE productName LIKE CONCAT('%', ?, '%')",
+            [keyword]
+        );
+        expect(result).toEqual(mockResult[0]);
     });
 
     test('filterByCategory should return menu items of a category', async () => {
         const category = 'minuman';
-        const mockResult = [[[{ id: 3, name: 'Es Teh' }]]];
+        const mockResult = [[{ id: 3, name: 'Es Teh' }]];
         dbMock.query.mockResolvedValueOnce(mockResult);
 
         const result = await menuRepo.filterByCategory(category);
-        expect(dbMock.query).toHaveBeenCalledWith('CALL GetCategory(?)', [category]);
-        expect(result).toEqual(mockResult[0][0]);
+        expect(dbMock.query).toHaveBeenCalledWith(
+            'SELECT * FROM menu WHERE category = ?',
+            [category]
+        );
+        expect(result).toEqual(mockResult[0]);
     });
 });

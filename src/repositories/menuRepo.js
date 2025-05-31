@@ -8,13 +8,16 @@ class MenuRepository {
   }
 
   async searchByName(keyword) {
-    const [results] = await this.db.query('CALL SearchMenu(?)', [keyword]);
-    return results[0] || [];
+    const [results] = await this.db.query(
+      "SELECT * FROM menu WHERE productName LIKE CONCAT('%', ?, '%')",
+      [keyword]
+    );
+    return results;
   }
 
   async filterByCategory(category) {
-    const [results] = await this.db.query('CALL GetCategory(?)', [category]);
-    return results[0] || [];
+    const [results] = await this.db.query("SELECT * FROM menu WHERE category = ?", [category]);
+    return results;
   }
 }
 

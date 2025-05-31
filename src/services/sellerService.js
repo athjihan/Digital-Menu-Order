@@ -6,13 +6,11 @@ class SellerService {
   }
 
   async getDashboard() {
-    const [queue, menuItems, topProducts, bottomProducts] = await Promise.all([
+    const [queue, menuItems] = await Promise.all([
       this.sellerRepo.getQueue(),
       this.sellerRepo.getMenuItems(),
-      this.sellerRepo.getTopProducts(),
-      this.sellerRepo.getBottomProducts()
     ]);
-    return { queue, menuItems, topProducts, bottomProducts };
+    return { queue, menuItems };
   }
 
   async confirmOrder(orderNumber) {

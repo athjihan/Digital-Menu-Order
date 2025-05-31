@@ -1,0 +1,18 @@
+0000000000000000000000000000000000000000 f6850a40c58f91e3ca3ea92f5b4120b90c69b134 athjihan <jihanathanaya99@gmail.com> 1743823489 +0700	clone: from https://github.com/athjihan/Digital-Menu-Order
+f6850a40c58f91e3ca3ea92f5b4120b90c69b134 e1ef6f58d77bec1cd13910356392c0af842e6133 athjihan <jihanathanaya99@gmail.com> 1743823594 +0700	commit: first commit
+e1ef6f58d77bec1cd13910356392c0af842e6133 534ff3d56ad29a2da37df1cf3617338ec35c3660 athjihan <jihanathanaya99@gmail.com> 1746348592 +0700	commit: add database
+534ff3d56ad29a2da37df1cf3617338ec35c3660 1c45742c8d7e31c58fa627dd23ff34f2b5241196 athjihan <jihanathanaya99@gmail.com> 1746348615 +0700	pull: Merge made by the 'ort' strategy.
+1c45742c8d7e31c58fa627dd23ff34f2b5241196 d7433dba9529b964882ba9a443da4e093cfc6156 athjihan <jihanathanaya99@gmail.com> 1746350697 +0700	commit: add docs
+d7433dba9529b964882ba9a443da4e093cfc6156 9f24c75e9f540a5a6564a0dcd19a2d94dfd87682 athjihan <jihanathanaya99@gmail.com> 1747618481 +0700	commit: db update
+9f24c75e9f540a5a6564a0dcd19a2d94dfd87682 9afcaa048b445cde61a41f829d9e8ba21ee45487 athjihan <jihanathanaya99@gmail.com> 1747618517 +0700	pull origin main: Merge made by the 'ort' strategy.
+9afcaa048b445cde61a41f829d9e8ba21ee45487 9afcaa048b445cde61a41f829d9e8ba21ee45487 athjihan <jihanathanaya99@gmail.com> 1747926691 +0700	reset: moving to HEAD
+9afcaa048b445cde61a41f829d9e8ba21ee45487 9afcaa048b445cde61a41f829d9e8ba21ee45487 athjihan <jihanathanaya99@gmail.com> 1747926928 +0700	reset: moving to HEAD
+9afcaa048b445cde61a41f829d9e8ba21ee45487 16b1c0ac77918d9323f6d432253b7b47a66f5687 athjihan <jihanathanaya99@gmail.com> 1747926930 +0700	pull origin main: Fast-forward
+16b1c0ac77918d9323f6d432253b7b47a66f5687 16b1c0ac77918d9323f6d432253b7b47a66f5687 athjihan <jihanathanaya99@gmail.com> 1748070464 +0700	reset: moving to HEAD
+16b1c0ac77918d9323f6d432253b7b47a66f5687 9afcaa048b445cde61a41f829d9e8ba21ee45487 athjihan <jihanathanaya99@gmail.com> 1748070474 +0700	checkout: moving from main to pre-refactor
+9afcaa048b445cde61a41f829d9e8ba21ee45487 16b1c0ac77918d9323f6d432253b7b47a66f5687 athjihan <jihanathanaya99@gmail.com> 1748070698 +0700	checkout: moving from pre-refactor to main
+16b1c0ac77918d9323f6d432253b7b47a66f5687 b9144e905a791102b50e01129bf15dc30409e2b0 athjihan <jihanathanaya99@gmail.com> 1748074541 +0700	commit: refactor & unit testing
+b9144e905a791102b50e01129bf15dc30409e2b0 e9c33ffaea4f67ce6eddcea799dd5829c3ec94ed athjihan <jihanathanaya99@gmail.com> 1748221456 +0700	pull origin main: Fast-forward
+e9c33ffaea4f67ce6eddcea799dd5829c3ec94ed 7d62e3722d79eddbbdac293f7bb6d8abdfc0ff45 athjihan <jihanathanaya99@gmail.com> 1748271342 +0700	commit: docker jalan tp button add to cart jd mati
+7d62e3722d79eddbbdac293f7bb6d8abdfc0ff45 7d62e3722d79eddbbdac293f7bb6d8abdfc0ff45 athjihan <jihanathanaya99@gmail.com> 1748666385 +0700	reset: moving to HEAD
+7d62e3722d79eddbbdac293f7bb6d8abdfc0ff45 2731cda54fc0c305f54ec44542a63e8851442600 athjihan <jihanathanaya99@gmail.com> 1748666414 +0700	checkout: moving from main to 2731cda54fc0c305f54ec44542a63e8851442600

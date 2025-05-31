@@ -10,6 +10,11 @@ function addToCart(cart, newItem) {
     return cart;
 }
 
+function clearCart() {
+    sessionStorage.removeItem("cart");
+    return [];
+}
+
 function removeFromCart(cart, index) {
     cart.splice(index, 1);
     return cart;
@@ -25,6 +30,7 @@ function saveCart(cart) {
 
 module.exports = {
     addToCart,
+    clearCart,
     removeFromCart,
     getCart,
     saveCart

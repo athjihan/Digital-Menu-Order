@@ -22,7 +22,10 @@ class SellerRepository {
   }
 
   async confirmOrder(orderNumber) {
-    await this.db.query('CALL UpdateQueueStatus(?)', [orderNumber]);
+    await this.db.query(
+      "UPDATE order_details SET queue_status = 'delivered' WHERE orderNumber = ?",
+      [orderNumber]
+    );
   }
 
   async addMenu(item) {
@@ -36,12 +39,20 @@ class SellerRepository {
   }
 
   async updateAvailability(productCode, availability) {
-    await this.db.query('CALL UpdateMenuAvailability(?, ?)', [productCode, availability]);
+    await this.db.query(
+      'UPDATE menu SET availability = ? WHERE productCode = ?',
+      [availability, productCode]
+    );
   }
 
   async getIncomeInRange(startDate, endDate) {
-    const [rows] = await this.db.query('CALL GetIncomeInRange(?, ?)', [startDate, endDate]);
-    return rows[0][0]?.totalIncome || 0;
+    const [rows] = await this.db.query(
+      `SELECT SUM(totalAmount) AS totalIncome
+       FROM orders
+       WHERE orderDate BETWEEN ? AND ?;`,
+      [startDate, endDate]
+    );
+    return rows[0]?.totalIncome || 0;
   }
 }
 module.exports = SellerRepository;

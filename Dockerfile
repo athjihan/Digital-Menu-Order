@@ -1,20 +1,20 @@
-# Gunakan image resmi Node.js
-FROM node:18
+# Use an official Node.js runtime as a parent image
+FROM node:18-alpine
 
-# Set working directory
-WORKDIR /usr/src/app/src
+# Set the working directory in the container
+WORKDIR /usr/src/app
 
-# Copy file package.json dan package-lock.json (jika ada)
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Install dependencies
+# Install application dependencies
 RUN npm install
 
-# Copy seluruh source code ke container
+# Copy the rest of the application code
 COPY . .
 
-# Ekspos port yang digunakan aplikasi
-EXPOSE 3000
+# Expose the port the app runs on
+EXPOSE 5500
 
-# Gunakan perintah npm start untuk menjalankan aplikasi
-CMD ["npm", "start"]
+# Define the command to run the app
+CMD [ "npm", "start" ]

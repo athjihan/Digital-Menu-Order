@@ -20,7 +20,7 @@ class OrderRepository {
   // Buat entry di tabel orders—pakai `conn`
   async createOrder(conn, { customerPhone, tableNumber, totalPrice, paymentMethod }) {
     await conn.query(
-      'CALL AddOrder(?, ?, ?, ?)',
+      "INSERT INTO orders (phoneNumber, tableNumber, totalAmount, payment, orderDate) VALUES (?, ?, ?, ?, NOW());",
       [customerPhone, tableNumber, totalPrice, paymentMethod]
     );
     const [orderRow] = await conn.query('SELECT LAST_INSERT_ID() AS orderNumber');

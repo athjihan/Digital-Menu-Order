@@ -16,12 +16,16 @@ describe('SellerRepository Unit Tests', () => {
         const endDate = '2024-12-31';
         const mockIncome = 1000000;
 
-        const mockResult = [[[{ totalIncome: mockIncome }]]];
+        const mockResult = [[{ totalIncome: mockIncome }]];
         dbMock.query.mockResolvedValueOnce(mockResult);
 
         const result = await sellerRepo.getIncomeInRange(startDate, endDate);
-
-        expect(dbMock.query).toHaveBeenCalledWith('CALL GetIncomeInRange(?, ?)', [startDate, endDate]);
+        expect(dbMock.query).toHaveBeenCalledWith(
+            `SELECT SUM(totalAmount) AS totalIncome
+       FROM orders
+       WHERE orderDate BETWEEN ? AND ?;`,
+            [startDate, endDate]
+        );
         expect(result).toBe(mockIncome);
     });
 
@@ -35,7 +39,12 @@ describe('SellerRepository Unit Tests', () => {
 
         const result = await sellerRepo.getIncomeInRange(startDate, endDate);
 
-        expect(dbMock.query).toHaveBeenCalledWith('CALL GetIncomeInRange(?, ?)', [startDate, endDate]);
+        expect(dbMock.query).toHaveBeenCalledWith(
+            `SELECT SUM(totalAmount) AS totalIncome
+       FROM orders
+       WHERE orderDate BETWEEN ? AND ?;`,
+            [startDate, endDate]
+        );
         expect(result).toBe(0);
     });
 
