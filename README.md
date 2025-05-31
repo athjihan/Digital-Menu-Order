@@ -62,7 +62,7 @@
 5. **Jalankan server**:
 
    ```bash
-   npm start
+  docker compose up --build
    ```
 
 6. **Akses aplikasi**:
