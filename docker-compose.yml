@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5500:5500"
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_NAME: seafood_database
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_DATABASE: seafood_database
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./seafood_db.sql:/docker-entrypoint-initdb.d/seafood_db.sql
+    restart: always
+
+volumes:
+  db_data:

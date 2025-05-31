@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Makanan</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .dashboard-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .dashboard-button {
+            background-color: #478491;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            min-width: 160px;
+            z-index: 1;
+            margin-top: 10px;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body style="font-family: 'Poppins';">
+    <div class="dashboard-switcher">
+        <button class="dashboard-button" id="dashboard-toggle">
+            <i class="fas fa-user"></i>
+        </button>
+        <div class="dropdown-menu" id="dashboard-dropdown">
+            <a href="/menu" class="dropdown-item">Customer</a>
+            <a href="/seller" class="dropdown-item">Staff</a>
+        </div>
+    </div>
+    <div class="container mt-4">
+        <h1>📜Menu</h1>
+        <div id="cart-toast" class="toast position-fixed top-0 start-50 translate-middle-x custom-toast" role="alert"
+            aria-live="assertive" aria-atomic="true" style="min-width: 250px; z-index: 1050; display: none;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ✅ Item added to cart!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+        <a href="#checkout"
+            class="btn btn-warning rounded-circle position-fixed bottom-0 end-0 m-3 d-flex justify-content-center align-items-center shadow"
+            style="width: 80px; height: 80px; font-size: 30px; z-index: 1050;">
+            🛒
+        </a>
+        <form action=" /menu" method="GET" class="mb-3">
+            <div class="d-flex align-items-center">
+                <div class="input-group flex-grow-1 width-100">
+                    <input type="text" name="search" class="form-control" placeholder="Search menu name..."
+                        style="border-radius: 20px 0 0 20px;">
+                    <button type="submit" class="btn btn-secondary"
+                        style="border-radius: 0 20px 20px 0; font-size: medium; background-color: #478491; color: white;">
+                        Search
+                    </button>
+                </div>
+                <div class="btn-group ms-3">
+                    <button type="submit" name="category" value="all" class="btn btn-secondary"
+                        style="font-size: medium; background-color: #478491; color: white;">All</button>
+                    <button type="submit" name="category" value="food" class="btn btn-secondary"
+                        style="font-size: medium; background-color: #478491; color: white;">Food</button>
+                    <button type="submit" name="category" value="drink" class="btn btn-secondary"
+                        style="font-size: medium; background-color: #478491; color: white;">Drink</button>
+                    <button type="submit" name="category" value="snack" class="btn btn-secondary"
+                        style="font-size: medium; background-color: #478491; color: white;">Snack</button>
+                </div>
+            </div>
+        </form>
+
+        <% if (menu.length> 0) { %>
+            <div class="mb-3">
+                <div class="row">
+                    <% menu.forEach(item=> { %>
+                        <% if (item.availability==="available" ) { %>
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <img src="<%= item.image_url %>" class="img-fluid mx-auto d-block" alt="
+                                            <%=item.productName %>"
+                                            style="width: 100%; height: 300px; object-fit: cover;">
+                                        <h5 class="card-title mt-2">
+                                            <%= item.productName %>
+                                        </h5>
+                                        <p>Rp<%= item.price.toLocaleString("id-ID") %>
+                                        </p>
+                                        <div class="d-flex gap-2 align-items-center">
+                                            <input type="number" class="form-control" style="width: 50%;"
+                                                name="quantities" min="1" value="1">
+                                            <button type="button"
+                                                class="btn btn-secondary flex-grow-1 w-100 rounded add-to-cart"
+                                                style="font-size: medium; background-color: #478491; color: white;"
+                                                data-id="<%= item.productCode %>" data-name="<%= item.productName %>"
+                                                data-price="<%= item.price %>">
+                                                Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                                <% }) %>
+                </div>
+            </div>
+
+            <div id="checkout" class="d-flex justify-content-between align-items-center">
+                <h3>🛒 Checkout Your Cart</h3>
+                <button id="clear-cart" class="btn btn-warning">🗑️ Clear Cart</button>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Menu</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-items"></tbody>
+            </table>
+
+            <form action="/order" method="POST" id="order-form">
+                <input type="hidden" name="selected_items" id="selected_items" required>
+                <input type="hidden" name="quantities" id="quantities" required>
+
+                <div class="mb-3">
+                    <label style="font-weight: bold;">📞Phone Number</label>
+                    <input type="text" name="customer_phone" class="form-control mt-2" required
+                        placeholder="+62xxx-xxxx-xxxx">
+                </div>
+
+                <div class="mb-3">
+                    <label style="font-weight: bold;">🍽️Table Number</label>
+                    <input type="number" name="table_number" class="form-control mt-2" min="1" required value="1">
+                </div>
+
+                <div class="mb-3">
+                    <label style="font-weight: bold;">💰Payment Method</label>
+                    <select name="payment_method" class="form-select mt-2">
+                        <option value="cashless">Cashless</option>
+                        <option value="cash">Cash</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn mb-5"
+                        style="font-size: larger; background-color: #478491; color: white;">
+                        Order Now
+                    </button>
+                </div>
+            </form>
+            <% } else { %>
+                <p>ℹ️ Menu is not available.</p>
+                <% } %>
+
+                    <% if (success) { %>
+                        <div class="alert alert-success"
+                            style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 1000;">
+                            <%= success %>
+                        </div>
+                        <script>
+                            setTimeout(() => {
+                                document.querySelector(".alert-success").style.display = "none";
+                            }, 3000);
+                        </script>
+                        <% } %>
+
+                            <% if (error) { %>
+                                <div class="alert alert-danger mt-3">
+                                    <%= error %>
+                                </div>
+                                <% } %>
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+            document.querySelectorAll(".add-to-cart").forEach(button => {
+                button.addEventListener("click", function () {
+                    const productId = this.dataset.id;
+                    const productName = this.dataset.name;
+                    const price = parseFloat(this.dataset.price);
+                    const quantityInput = this.closest(".card-body").querySelector("input[name='quantities']");
+                    const quantity = parseInt(quantityInput.value) || 1;
+
+                    const existingItem = cart.find(item => item.id === productId);
+                    if (existingItem) {
+                        existingItem.quantity += quantity;
+                    } else {
+                        cart.push({ id: productId, name: productName, price, quantity });
+                    }
+
+                    sessionStorage.setItem("cart", JSON.stringify(cart));
+                    displayCartItems();
+                    // Tampilkan toast Bootstrap
+                    const toast = document.getElementById("cart-toast");
+                    toast.style.display = "block"; // Pastikan toast muncul
+                    setTimeout(() => {
+                        toast.style.display = "none";
+                    }, 2000); // Toast akan hilang setelah 2 detik
+                });
+            });
+
+            function displayCartItems() {
+                const cartTable = document.getElementById("cart-items");
+                const cartData = JSON.parse(sessionStorage.getItem("cart")) || [];
+                cartTable.innerHTML = "";
+
+                if (cartData.length === 0) {
+                    cartTable.innerHTML = "<tr><td colspan='5'>No items in cart</td></tr>";
+                } else {
+                    cartData.forEach((item, index) => {
+                        const row = `
+                            <tr>
+                                <td>${item.name}</td>
+                                <td>Rp ${item.price.toLocaleString()}</td>
+                                <td>${item.quantity}</td>
+                                <td>Rp ${(item.price * item.quantity).toLocaleString()}</td>
+                                <td>
+                                    <button class="btn btn-outline-danger btn-sm remove-item" data-index="${index}">❌ Cancel</button>
+                                </td>
+                            </tr>
+                        `;
+                        cartTable.innerHTML += row;
+                    });
+                }
+
+                document.querySelectorAll(".remove-item").forEach(button => {
+                    button.addEventListener("click", function () {
+                        const index = this.dataset.index;
+                        cart.splice(index, 1);
+                        sessionStorage.setItem("cart", JSON.stringify(cart));
+                        displayCartItems();
+                    });
+                });
+            }
+
+            displayCartItems();
+
+            document.getElementById("clear-cart").addEventListener("click", function () {
+                if (confirm("Are you sure you want to clear the cart?")) {
+                    sessionStorage.removeItem("cart");
+                    displayCartItems();
+                    location.reload();
+                }
+            });
+        });
+
+        document.getElementById("order-form").addEventListener("submit", function (e) {
+            const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+            if (cart.length === 0) {
+                alert("Cart is empty! Please add items before ordering.");
+                e.preventDefault(); // Prevent form submission
+                return;
+            }
+
+            const selectedItems = cart.map(item => item.id).join(",");
+            const quantities = cart.map(item => item.quantity).join(",");
+
+            document.getElementById("selected_items").value = selectedItems;
+            document.getElementById("quantities").value = quantities;
+
+            sessionStorage.removeItem("cart");
+        });
+
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const dashboardToggle = document.getElementById("dashboard-toggle");
+            const dashboardDropdown = document.getElementById("dashboard-dropdown");
+
+            dashboardToggle.addEventListener("click", function () {
+                dashboardDropdown.classList.toggle("show");
+            });
+
+            // Close the dropdown if the user clicks outside of it
+            window.addEventListener("click", function (event) {
+                if (!event.target.matches(".dashboard-button") && !event.target.matches(".dashboard-button i")) {
+                    if (dashboardDropdown.classList.contains("show")) {
+                        dashboardDropdown.classList.remove("show");
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

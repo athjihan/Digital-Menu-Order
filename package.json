@@ -1,0 +1,22 @@
+{
+  "name": "project01",
+  "version": "1.0.0",
+  "main": "app01.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node bin/www.js",
+    "dev": "nodemon bin/www.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "mysql2": "^3.12.0",
+    "open": "^10.1.0",
+    "project01": "file:"
+  },
+  "description": ""
+}
