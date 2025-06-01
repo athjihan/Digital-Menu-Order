@@ -1,10 +1,10 @@
-version: '3.8'
 
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
+    image: athjihan/digital-menu:latest
     ports:
       - "5500:5500"
     environment:
@@ -13,18 +13,25 @@ services:
       DB_PASSWORD: ""
       DB_NAME: seafood_database
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: always
 
   db:
-    image: mysql:8.0
+    build:
+      context: ./custom-mysql
+      dockerfile: Dockerfile
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_DATABASE: seafood_database
     volumes:
       - db_data:/var/lib/mysql
-      - ./seafood_db.sql:/docker-entrypoint-initdb.d/seafood_db.sql
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      start_period: 30s
 
 volumes:
   db_data:
