@@ -18,9 +18,7 @@ services:
     restart: always
 
   db:
-    build:
-      context: ./custom-mysql
-      dockerfile: Dockerfile
+    image: athjihan/custom-mysql:latest
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_DATABASE: seafood_database
