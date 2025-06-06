@@ -18,5 +18,8 @@
     "open": "^10.1.0",
     "project01": "file:"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
 }

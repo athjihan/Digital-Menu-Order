@@ -1,0 +1,54 @@
+name: Docker Test CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: athjihan/custom-mysql:latest
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+          MYSQL_DATABASE: seafood_database
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Compose
+        run: sudo apt-get install docker-compose
+
+      - name: Build and start services
+        run: docker-compose up -d --build
+
+      - name: Wait for DB service to be healthy
+        run: |
+          timeout=60
+          while [[ "$(docker inspect --format='{{.State.Health.Status}}' $(docker-compose ps -q db))" != "healthy" ]]; do
+            sleep 2
+            ((timeout--))
+            if [[ $timeout -le 0 ]]; then
+              echo "DB service did not become healthy in time."
+              exit 1
+            fi
+          done
+
+      - name: Run tests
+        run: docker-compose run --rm app npm test
+
+      - name: Tear down
+        run: docker-compose down
