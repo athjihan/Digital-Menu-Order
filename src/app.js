@@ -13,7 +13,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const sellerRoutes = require('./routes/sellerRoutes');
 
 const app = express();
-app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: true }));
+// app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: true }));
 app.use('/assets', express.static(path.join(__dirname, '../assets')));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
@@ -37,8 +37,9 @@ app.get('/', (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.redirect(`/menu?error=${encodeURIComponent(err.message)}`);
+  console.error('ERROR:', err.stack);
+  res.status(500).send('Internal Server Error: ' + err.message);
 });
+
 
 module.exports = app;
