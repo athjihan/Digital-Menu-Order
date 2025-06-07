@@ -1,4 +1,5 @@
 // src/app.js
+
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
@@ -13,7 +14,9 @@ const orderRoutes = require('./routes/orderRoutes');
 const sellerRoutes = require('./routes/sellerRoutes');
 
 const app = express();
-// app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: true }));
+app.set('views', path.join(__dirname, 'views'));
+
+app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: true }));
 app.use('/assets', express.static(path.join(__dirname, '../assets')));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
