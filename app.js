@@ -35,7 +35,9 @@ const pool = mysql.createPool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    ssl: {} // ✅ Railway butuh ini agar koneksi aman
+    ssl: {
+        rejectUnauthorized: false 
+    } // ✅ Railway butuh ini agar koneksi aman
 });
 
 
