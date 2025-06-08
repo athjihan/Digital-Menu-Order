@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2/promise");
 const app = express();
-const port = 5500;
+const port = process.env.PORT || 5500;
 const path = require('path');
 
 const session = require("express-session");
@@ -237,6 +237,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server berjalan di http://localhost:${port}/`);
+  console.log(`Server berjalan di http://localhost:${port}/`);
 });
-
